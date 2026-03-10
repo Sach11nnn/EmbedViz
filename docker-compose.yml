@@ -1,0 +1,33 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+      - WS_AUTH_TOKEN=embedviz_secret_token_123
+    command: npm run dev
+    healthcheck:
+      test: [ "CMD", "wget", "-qO-", "http://localhost:8080/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+      - VITE_WS_URL=ws://localhost:8080
+      - VITE_WS_AUTH_TOKEN=embedviz_secret_token_123
+      - VITE_API_URL=http://localhost:8080
+    command: npm run dev -- --host
+    depends_on:
+      backend:
+        condition: service_healthy

@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
+    "lucide-react": "^0.575.0",
+    "reactflow": "^11.11.4",
+    "serialport": "^10.5.0",
+    "web-tree-sitter": "^0.26.6"
+  }
+}
